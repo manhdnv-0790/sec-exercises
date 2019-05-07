@@ -1,10 +1,20 @@
 # SOLVE
 
-## Bài 2: Easy cipher
+# Bài 1
+
+* Viết biểu diễn của số `1234` sang:
+    * base-2 => 10011010010
+    * base-8 => 2322
+    * base-16 => 4D2
+    * base-36 => YA
+    * base-58 => 2PM
+    * base-64 => MTIzNA==
+
+## Bài 3: Easy cipher
 
 `problem: https://ksnctf.sweetduet.info/problem/2`
 
-- Chúng ta nhận được một chuỗi:
+* Chúng ta nhận được một chuỗi:
 
     `EBG KVVV vf n fvzcyr yrggre fhofgvghgvba pvcure gung ercynprf n yrggre jvgu gur yrggre KVVV yrggref nsgre vg va gur nycunorg. EBG KVVV vf na rknzcyr bs gur Pnrfne pvcure, qrirybcrq va napvrag Ebzr. Synt vf SYNTFjmtkOWFNZdjkkNH. Vafreg na haqrefpber vzzrqvngryl nsgre SYNT.`
 

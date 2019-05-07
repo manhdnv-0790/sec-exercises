@@ -14,9 +14,9 @@
 
 ## Danh sách
 - [x] [0x00 - Tutorial](0x00)
-  - [ ] Ex 1
+  - [x] Ex 1
 - [ ] [0x01 - Encoding](0x01)
-  - [ ] Ex 1
+  - [x] Ex 1
   - [x] Ex 2
   - [ ] Ex 3
   - [ ] Ex 4
