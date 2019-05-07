@@ -23,9 +23,9 @@
   - [ ] Ex 5
 - [ ] [0x02 - PHP](0x02)
   - [ ] Ex 1
-  - [ ] Ex 2
+  - [x] Ex 2
 - [ ] [0x03 - Basic Auth](0x03)
-  - [ ] Ex 1
+  - [x] Ex 1
   - [ ] Ex 2
 - [ ] [0x04 - Programming](0x04)
   - [ ] Ex 1
