@@ -28,7 +28,7 @@
   - [x] Ex 1
   - [ ] Ex 2
 - [ ] [0x04 - Programming](0x04)
-  - [ ] Ex 1
+  - [x] Ex 1
   - [ ] Ex 2
   - [ ] Ex 3
   - [ ] Ex 4
