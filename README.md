@@ -15,29 +15,29 @@
 ## Danh sách
 
 - [x] [0x00 - Tutorial](0x00)
-  - [ ] Ex 1
+  - [x] Ex 1
 - [ ] [0x01 - Encoding](0x01)
-  - [ ] Ex 1
-  - [ ] Ex 2
+  - [x] Ex 1
+  - [x] Ex 2
   - [ ] Ex 3
   - [ ] Ex 4
   - [ ] Ex 5
 - [ ] [0x02 - PHP](0x02)
   - [ ] Ex 1
-  - [ ] Ex 2
+  - [x] Ex 2
   - [ ] Ex 3
   - [ ] Ex 4
 - [ ] [0x03 - Basic Auth](0x03)
-  - [ ] Ex 1
+  - [x] Ex 1
   - [ ] Ex 2
 - [ ] [0x04 - Programming](0x04)
-  - [ ] Ex 1
+  - [x] Ex 1
   - [ ] Ex 2
   - [ ] Ex 3
   - [ ] Ex 4
-- [ ] [0x05 - SQli](0x05)
-  - [ ] Ex 1
-- [ ] [0x06 - One-Time Pad + RNG](0x06)
+- [x] [0x05 - SQli](0x05)
+  - [x] Ex 1
+- [ ] [0x06 - One-Time Pad](0x06)
   - [ ] Ex 1
   - [ ] Ex 2
 - [ ] [0x07 - Javascript](0x07)
