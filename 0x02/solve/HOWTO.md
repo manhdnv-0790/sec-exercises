@@ -183,4 +183,139 @@ Sau khi chạy sẽ được kết quả:
 
 => Như vậy chúng ta đã lấy được flag là: `FLAG_uc8qVFa8Sr6DwYVP`
 
-# Bài 4: 
+# Bài 4: Simple Auth II 
+
+Problem: `http://ksnctf.sweetduet.info/problem/35`
+
+Vào bài này chúng ta lại nhận được 1 trang login `http://ctfq.sweetduet.info:10080/~q35/auth.php`
+và source code php
+
+```php
+<?php
+
+function h($s)
+{
+    return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+}
+
+if (!isset($_POST['id']) or !is_string($_POST['id']))
+    $_POST['id'] = '';
+if (!isset($_POST['password']) or !is_string($_POST['password']))
+    $_POST['password'] = '';
+
+$try = false;
+$ok = false;
+
+if ($_POST['id']!=='' or $_POST['password']!=='')
+{
+    $try = true;
+    $db = new PDO('sqlite:database.db');
+    $s = $db->prepare('SELECT * FROM user WHERE id=? AND password=?');
+    $s->execute(array($_POST['id'], $_POST['password']));
+    $ok = $s->fetch() !== false;
+}
+
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Auth 2</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <style>
+      body
+      {
+        padding: 40px;
+        background: #eee;
+      }
+      .form-control
+      {
+        position: relative;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      .form-control:focus
+      {
+        z-index: 2;
+      }
+      input[type="text"]
+      {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      input[type="password"]
+      {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+      button
+      {
+        margin-top: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form method="POST" style="width:320px; margin:auto">
+        <h1>Simple Auth 2</h1>
+
+<?php if($try and $ok) { ?>
+        <div class="alert alert-success">
+          Congraturation!<br>
+          The flag is <?php echo h($_POST['password']); ?>
+        </div>
+<?php } ?>
+
+<?php if ($try and !$ok) { ?>
+        <div class="alert alert-danger">
+          Incorrect ID or password
+        </div>
+<?php } ?>
+
+<?php if (!$ok) { ?>
+        <input
+          type="text"
+          class="form-control"
+          id="id"
+          name="id"
+          placeholder="ID"
+          value="<?php echo h($_POST['id']); ?>">
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          placeholder="Password">
+        <button
+          class="btn btn-lg btn-primary btn-block"
+          type="submit">
+          Sign in
+        </button>
+<?php } ?>
+      </form>
+    </div>
+  </body>
+</html>
+```
+
+Sau khi thử check các thứ trong trang login, và đọc qua source, thì khẳng định luôn là bài này sẽ không dính sql injection :( thế nên bỏ qua cách tấn công sql injection.
+Bắt đầu đi search xem mấy hàm có sử dụng trong source như `is_string` để xem nó có dính lỗi gì vớ vẩn không? nhưng rất tiếc là không.
+Đến đây thì bí ý tưởng rồi. Loay hoay một lúc chợt nhận ra trang này dùng  `apache` và `centos`. Rồi lại hack thời gian trở về những ngày tháng bị hành `php với apache` ở công ty cũ xem nó có tý nào có thể xem xét không.
+Và thấy là `centos` thì chỉ hay bị mấy cái về phân quyền file cho project. Hồi xưa mơi cài apache vì chưa biết cách phân quyền cho hợp lý nên cứ `sudo chmod 777` nguyên cho cả project. Nghĩ đến đây thì cũng ngờ ngờ thôi, không biết đúng sai thế nào, nhưng phải thử.
+Vào trở lại trang đăng nhập, xóa đoạn url là `auth.php`, mục đích là nếu dính vào mấy cái nói trên thì sẽ bị show ra tất cả file trong folder chứa project đó, biết đâu tìm được flag.
+Nhưng đời không như mơ, :'( xóa xong để url không có `auth.php` nhưng vẫn bị chuyển hướng tới trang đăng nhập.
+![Auth](images/auth.png)
+Ok, với php thì nếu vào project mà vẫn tự động vào file thì trong folder phải có file `index.php` hoặc `home.php` (cái này là mặc định).
+Rồi thử điền url thêm `index.php` và `home.php` nhưng đều nhận kết quả là không tìm thấy file
+![index](images/index.png)
+Hoang mang lần 2. Thôi thì đọc lại code một lần nữa xem trong code có gì đặc biệt không.
+Ồi không, nó dùng sqlite, và đường dẫn kết nối chỉ là `sqlite:database.db`, tức là file `database.db` sẽ nằm cùng thư mục với `auth.php`. Thế thì ngại gì mà không thử điền url thêm `database.db` vào.
+![sqlite](images/sqlite.png)
+Ơ kìa, ở gì kìa, nó cho tải file `database.db`. ối, thế thì mở lên để xem có gì nào.
+Mở database ra thì nhận được 2 bảng `user2` và `user`
+![database](images/database.png)
+Mở bảng `user` lên thì thấy flag ở cột password.
+![user](images/user.png)
+
+=> Vậy flag sẽ là: `FLAG_iySDmApNegJvwmxN`

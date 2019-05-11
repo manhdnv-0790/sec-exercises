@@ -26,7 +26,7 @@
   - [ ] Ex 1
   - [x] Ex 2
   - [x] Ex 3
-  - [ ] Ex 4
+  - [x] Ex 4
 - [ ] [0x03 - Basic Auth](0x03)
   - [x] Ex 1
   - [ ] Ex 2
