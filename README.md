@@ -29,7 +29,7 @@
   - [x] Ex 4
 - [ ] [0x03 - Basic Auth](0x03)
   - [x] Ex 1
-  - [ ] Ex 2
+  - [x] Ex 2
 - [ ] [0x04 - Programming](0x04)
   - [x] Ex 1
   - [ ] Ex 2

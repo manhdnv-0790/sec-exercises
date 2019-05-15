@@ -25,4 +25,76 @@ Problem: `https://ksnctf.sweetduet.info/problem/9`
 
 Lại là một file pcap nữa. Mở bằng wireshark lên và moi móc nó thôi nào.
 ![Alt text](images/q9_wireshark.png?raw=true "Basic authen")
-Đây vẫn là bắt gói tin TCP và HTTP.
+Đây vẫn là bắt gói tin TCP và HTTP. Phân tích gói tin một lúc thì cũng nhận dạng được nó dùng Digest Authentication.
+Bên trong có một gói tin có trả về `q9:secret:c627e19450db746b739f41b64097d449`. Và đường dẫn cần đọc là `http://ksnctf.sweetduet.info:10080/~q9/flag.html`. Mình sẽ dựa vào đó để code.
+
+Đầu tiên khai báo các biến chứa giá trị mà đọc được từ pcap
+
+```py
+#URI cần đi tới
+uri = "/~q9/flag.html"
+#METHOD được sử dụng
+method = "GET"
+# Mã ha1 là chuỗi secret trong q9:secret:c627e19450db746b739f41b64097d449
+ha1 = "c627e19450db746b739f41b64097d449"
+# ha2 là chuỗi hash md5 tính được dựa vào methos và uri 
+ha2 = hashlib.md5("{}:{}".format(method, uri).encode('utf-8')).hexdigest()
+# mình tự định nghĩa
+cnonce = "9691c24"
+# Số lượng request gửi tới server 
+nc = "00000001"
+# một số thứ khác đọc được từ file pcap
+realm = "secret"
+qop = "auth"
+algorithm = "MD5"
+username ="q9"
+```
+
+Trước tiên phải đi tới URL cần vào để server trả về yêu cầu xác thực, mục đích lấy được nonce
+
+```py
+url = "http://ksnctf.sweetduet.info:10080/~q9/flag.html"
+auth_header = requests.get(url).headers["WWW-Authenticate"]
+auth_arr = auth_header.split(" ")
+nonce = auth_arr[2][7:-2]
+```
+
+Dùng nonce lấy được kết hợp một số thông tin ở trên để tạo chuỗi reponse
+
+```py
+before_reponse = "{}:{}:{}:{}:{}:{}".format(ha1,nonce,nc,cnonce,qop, ha2)
+response = hashlib.md5(before_reponse.encode("utf-8")).hexdigest()
+# print(response)
+```
+
+Tạo lại headers có chuỗi reponse vừa tạo ở trên để đi tới trang `flag.html`. Đọc nội dung và in ra.
+
+```py
+headers  = {
+    "Authorization":"Digest username=\"{}\", realm=\"{}\", nonce=\"{}\", uri=\"{}\", algorithm=\"{}\", response=\"{}\", qop={}, nc={}, cnonce=\"{}\"".format(username, realm, nonce, uri, algorithm, response, qop, nc, cnonce)
+}
+
+# print(headers)
+
+results =  requests.get(url, headers=headers)
+
+print(results.text)
+```
+
+Kết quả sau khi chạy sẽ là
+
+```html
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>Q9</title>
+  </head>
+  <body>
+    <p>FLAG_YBLyivV4WEvC4pp3</p>
+  </body>
+</html>
+```
+
+=>> Vậy ta có được flag là `FLAG_YBLyivV4WEvC4pp3`
+
+source code: [Code](code_digest.py)
